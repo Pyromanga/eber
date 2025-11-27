@@ -1,5 +1,5 @@
 #!/bin/bash
 
-node server.js &
+node server/CORE/server.js &
 echo $! > server.pid
 sleep 2
