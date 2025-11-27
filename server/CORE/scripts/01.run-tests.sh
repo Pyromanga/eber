@@ -1,10 +1,8 @@
 #!/bin/bash
 # Wait until server is ready
-SERVER_URL="http://localhost:3000"
-
 echo "Waiting for server to be ready..."
 for i in {1..10}; do
-  if curl --silent --output /dev/null $SERVER_URL; then
+  if curl --silent --output /dev/null $SERVER_FULL_URL; then
     echo "Server is up!"
     break
   fi
