@@ -1,0 +1,23 @@
+name: Playground
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-init:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Make init executable
+        run: chmod +x server/CORE/init.sh
+
+      - name: Run init script
+        run: server/CORE/init.sh
