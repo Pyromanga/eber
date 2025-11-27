@@ -20,7 +20,7 @@ jobs:
         run: npm install express ngrok
 
       - name: Install ngrok auth
-        run: npx ngrok authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
+        run: npx ngrok authtoken ${{ secrets.NGROK_AUTH }}
 
       - name: Start server + ngrok
         run: |
