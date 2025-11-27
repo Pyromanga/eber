@@ -1,6 +1,6 @@
 // server/CORE/controllers/testController.js
 const logger = require('../utils/logger');
-const { request } = require('../utils/httpClient');
+const { request } = require('../utils/mock requests.js');
 
 const SERVER_URL = 'http://localhost:3000';
 
