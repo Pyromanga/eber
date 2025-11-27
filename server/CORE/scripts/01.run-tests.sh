@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./init.sh
+source ../scripts/init.sh
 # Wait until server is ready
 echo "Waiting for server to be ready..."
 for i in {1..10}; do
