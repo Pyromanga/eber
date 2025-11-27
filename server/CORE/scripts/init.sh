@@ -2,7 +2,7 @@
 
 THIS_SCRIPT="$(basename "$0")"
 SCRIPTS_DIR="$(dirname "$0")"
-CONFIG_FILE="$(dirname "$0")/../config/env"
+CONFIG_FILE="server/CORE/config/env"
 
 if [ ! -f "$CONFIG_FILE" ]; then
   echo "Config file not found at $CONFIG_FILE"
