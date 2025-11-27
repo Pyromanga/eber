@@ -17,7 +17,7 @@ jobs:
           node-version: 18
 
       - name: Make init executable
-        run: chmod +x server/CORE/init.sh
+        run: chmod +x server/CORE/scripts/init.sh
 
       - name: Run init script
-        run: server/CORE/init.sh
+        run: server/CORE/scripts/init.sh
