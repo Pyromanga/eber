@@ -1,4 +1,16 @@
 #!/bin/bash
+# Wait until server is ready
+SERVER_URL="http://localhost:3000"
 
-echo "Sending GET request..."
-curl -v http://localhost:3000/
+echo "Waiting for server to be ready..."
+for i in {1..10}; do
+  if curl --silent --output /dev/null $SERVER_URL; then
+    echo "Server is up!"
+    break
+  fi
+  echo "Server not ready yet, retrying..."
+  sleep 1
+done
+
+# Jetzt Tests ausführen
+node ../CORE/controllers/testController.js
