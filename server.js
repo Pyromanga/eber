@@ -1,12 +1,14 @@
-// server.js
 const express = require('express');
-const app = express();
+const logger = require('./logger');
 
-const PORT = 3000;
+const app = express();
+const port = 3000;
 
 app.get('/', (req, res) => {
-  console.log("Request received at /");
-  res.send('Hello from GitHub Actions!');
+  logger.info("GET / was requested");
+  res.send("Hello from GitHub Actions!");
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(port, () => {
+  logger.info(`Server running on http://localhost:${port}`);
+});
