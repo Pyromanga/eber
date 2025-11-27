@@ -1,8 +1,10 @@
 #!/bin/bash
+
+source ./init.sh
 # Wait until server is ready
 echo "Waiting for server to be ready..."
 for i in {1..10}; do
-  if curl --silent --output /dev/null $SERVER_FULL_URL; then
+  if curl --silent --output /dev/null "$SERVER_FULL_URL"; then
     echo "Server is up!"
     break
   fi
