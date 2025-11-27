@@ -15,7 +15,7 @@ source "$CONFIG_FILE"
 set +o allexport
 
 # Build full URL
-SERVER_FULL_URL="${SERVER_PROTOCOL}://${SERVER_URL}:${SERVER_PORT}"
+SERVER_FULL_URL="$SERVER_PROTOCOL://$SERVER_URL:$SERVER_PORT"
 
 # Export for all child processes
 export SERVER_FULL_URL
