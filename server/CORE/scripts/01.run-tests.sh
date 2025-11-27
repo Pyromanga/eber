@@ -13,4 +13,4 @@ for i in {1..10}; do
 done
 
 # Jetzt Tests ausführen
-node ../CORE/controllers/testController.js
+node server/CORE/controllers/testController.js
