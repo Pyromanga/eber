@@ -1,0 +1,40 @@
+name: Node Test Playground
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-server:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install express
+
+      - name: Start Node server (with logging)
+        run: |
+          node server.js > server.log 2>&1 &
+          echo $! > server.pid
+          sleep 2
+          echo "--- Initial Server Logs ---"
+          cat server.log
+
+      - name: Ghost user sends GET request
+        run: |
+          echo "--- Sending GET request ---"
+          curl -v http://localhost:3000/
+          echo "--- Server Logs After Request ---"
+          cat server.log
+
+      - name: Stop server
+        run: |
+          kill $(cat server.pid)
+          echo "Server stopped."
