@@ -28,11 +28,13 @@ echo "  FULL URL: $SERVER_FULL_URL"
 
 echo "Running all scripts in $SCRIPTS_DIR, skipping $THIS_SCRIPT..."
 
-for script in "$SCRIPTS_DIR"/*.sh; do
-  if [[ "$(basename "$script")" != "$THIS_SCRIPT" ]]; then
-    echo "Executing $script..."
-    bash "$script"
-  fi
-done
+find "$SCRIPTS_DIR" -maxdepth 1 -type f -name "*.sh" ! -name "$THIS_SCRIPT" \
+  | sort \
+  | while read -r script; do
+      echo "Executing $script..."
+      bash "$script"
+    done
+
+
 
 echo "All scripts executed."
