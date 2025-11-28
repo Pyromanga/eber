@@ -1,0 +1,95 @@
+name: Test Native Linux Headless2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  rust:
+    name: Rust Headless Render
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install System Packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb xauth imagemagick x11-apps
+
+      - name: Cache cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('rust-minimal/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Rust program
+        run: |
+          cd rust-minimal
+          cargo build --release
+
+      - name: Run Rust program headless + screenshot
+        run: |
+          cd rust-minimal
+          xvfb-run -a ./target/release/rust-minimal &
+          PID=$!
+          sleep 3 # genug Zeit für winit unter Xvfb
+          import -window root rust-screenshot.png
+          kill $PID
+
+      - name: Upload Rust screenshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: rust-screenshot
+          path: rust-minimal/rust-screenshot.png
+
+  go:
+    name: Go Headless Render
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install System Packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb xauth imagemagick x11-apps
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+          cache: true
+
+      - name: Download Go modules
+        run: |
+          cd go-minimal
+          go mod tidy
+          go mod download
+
+      - name: Build Go program
+        run: |
+          cd go-minimal
+          go build -o go-minimal main.go
+
+      - name: Run Go program headless + screenshot
+        run: |
+          cd go-minimal
+          xvfb-run -a ./go-minimal &
+          PID=$!
+          sleep 3
+          import -window root go-screenshot.png
+          kill $PID
+
+      - name: Upload Go screenshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: go-screenshot
+          path: go-minimal/go-screenshot.png
