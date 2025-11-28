@@ -2,7 +2,7 @@
 const logger = require('../utils/logger');
 const { request } = require('../utils/mock-requests.js');
 
-const SERVER_URL = 'http://localhost:3000';
+const SERVER_URL = process.env.SERVER_FULL_URL;
 
 async function runTests() {
   logger.info('Starting tests...');
