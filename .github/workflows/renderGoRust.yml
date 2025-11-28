@@ -36,7 +36,7 @@ jobs:
           kill $RUST_PID
 
       - name: Upload Rust screenshot
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: rust-screenshot
           path: rust-minimal/rust-screenshot.png
@@ -65,7 +65,7 @@ jobs:
           kill $GO_PID
 
       - name: Upload Go screenshot
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: go-screenshot
           path: go-minimal/go-screenshot.png
