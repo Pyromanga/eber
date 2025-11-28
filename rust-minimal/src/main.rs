@@ -1,3 +1,4 @@
+// rust-minimal/src/main.rs
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     event::{Event, WindowEvent},
@@ -25,9 +26,10 @@ fn main() {
                 _ => {}
             },
             Event::RedrawRequested(_) => {
-                let frame = pixels.frame();
+                // Mutable Frame holen
+                let frame: &mut [u8] = pixels.frame_mut();
 
-                // Weiß füllen
+                // Hintergrund weiß füllen
                 for pixel in frame.chunks_exact_mut(4) {
                     pixel[0] = 255; // R
                     pixel[1] = 255; // G
@@ -35,7 +37,7 @@ fn main() {
                     pixel[3] = 255; // A
                 }
 
-                // Schwarze Linie horizontal
+                // Schwarze Linie horizontal zeichnen
                 for x in 50..350 {
                     let y = 200;
                     let idx = (y * 400 + x) * 4;
