@@ -5,7 +5,7 @@
 
 
 echo "Waiting for server to be ready..."
-echo $SERVER_FULL_URL
+echo "$SERVER_FULL_URL <- server url"
 
 for i in {1..10}; do
   if curl --silent --output /dev/null "$SERVER_FULL_URL"; then
