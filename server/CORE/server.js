@@ -1,11 +1,16 @@
 // server/CORE/server.js
 const https = require('https');
-
+const fs = require('fs');
 const registerRoutes = require('./routes');
 const serverHandler = require('./utils/serverHandler');
 const logger = require('./utils/logger');
 
-const server = https.createServer(serverHandler);
+const key = fs.readFileSync(__dirname + '/certs/server.key');
+const cert = fs.readFileSync(__dirname + '/certs/server.crt');
+
+const options = { key, cert };
+
+const server = https.createServer(options, serverHandler);
 registerRoutes();
 
 const SERVER_PORT = process.env.SERVER_PORT;
