@@ -1,0 +1,94 @@
+name: Test Native Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-run:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        language: [rust, go]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # Shared Xvfb setup
+      - name: Install Xvfb and ImageMagick
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb imagemagick
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 800x600x24 &
+
+      # Rust steps
+      - name: Setup Rust
+        if: matrix.language == 'rust'
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Cache Rust dependencies
+        if: matrix.language == 'rust'
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('rust-minimal/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Build Rust program
+        if: matrix.language == 'rust'
+        run: |
+          cd rust-minimal
+          cargo build
+
+      - name: Run Rust program and take screenshot
+        if: matrix.language == 'rust'
+        run: |
+          cd rust-minimal
+          ./target/debug/rust-minimal &
+          RUST_PID=$!
+          sleep 2
+          import -window root rust-screenshot.png
+          kill $RUST_PID
+
+      - name: Upload Rust screenshot
+        if: matrix.language == 'rust'
+        uses: actions/upload-artifact@v4
+        with:
+          name: rust-screenshot
+          path: rust-minimal/rust-screenshot.png
+
+      # Go steps
+      - name: Setup Go
+        if: matrix.language == 'go'
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+
+      - name: Build Go program
+        if: matrix.language == 'go'
+        run: |
+          cd go-minimal
+          go build -o go-minimal main.go
+
+      - name: Run Go program and take screenshot
+        if: matrix.language == 'go'
+        run: |
+          cd go-minimal
+          ./go-minimal &
+          GO_PID=$!
+          sleep 2
+          import -window root go-screenshot.png
+          kill $GO_PID
+
+      - name: Upload Go screenshot
+        if: matrix.language == 'go'
+        uses: actions/upload-artifact@v4
+        with:
+          name: go-screenshot
+          path: go-minimal/go-screenshot.png
