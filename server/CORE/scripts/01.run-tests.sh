@@ -8,7 +8,7 @@ echo "Waiting for server to be ready..."
 echo "$SERVER_FULL_URL <- server url"
 
 for i in {1..10}; do
-  if curl --silent --output /dev/null "$SERVER_FULL_URL"; then
+  if curl -k --silent --output /dev/null "$SERVER_FULL_URL"curl --silent --output /dev/null --cacert server/CORE/certs/server.crt "$SERVER_FULL_URL"; then
     echo "Server is up!"
     break
   fi
