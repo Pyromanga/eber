@@ -1,0 +1,71 @@
+name: Test Native Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # Rust
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Build Rust program
+        run: |
+          cd rust-minimal
+          cargo build --release
+
+      - name: Run Rust program and take screenshot
+        run: |
+          sudo apt-get update && sudo apt-get install -y xvfb imagemagick
+          cd rust-minimal
+          Xvfb :99 -screen 0 800x600x24 &
+          export DISPLAY=:99
+          ./target/release/rust-minimal &
+          RUST_PID=$!
+          sleep 2
+          import -window root rust-screenshot.png
+          kill $RUST_PID
+
+      - name: Upload Rust screenshot
+        uses: actions/upload-artifact@v3
+        with:
+          name: rust-screenshot
+          path: rust-minimal/rust-screenshot.png
+
+      # Go
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+
+      - name: Build Go program
+        run: |
+          cd go-minimal
+          go build -o go-minimal main.go
+
+      - name: Run Go program and take screenshot
+        run: |
+          sudo apt-get install -y xvfb imagemagick
+          cd go-minimal
+          Xvfb :99 -screen 0 800x600x24 &
+          export DISPLAY=:99
+          ./go-minimal &
+          GO_PID=$!
+          sleep 2
+          import -window root go-screenshot.png
+          kill $GO_PID
+
+      - name: Upload Go screenshot
+        uses: actions/upload-artifact@v3
+        with:
+          name: go-screenshot
+          path: go-minimal/go-screenshot.png
