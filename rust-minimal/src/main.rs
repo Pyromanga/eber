@@ -25,7 +25,7 @@ fn main() {
                 _ => {}
             },
             Event::RedrawRequested(_) => {
-                let frame = pixels.get_frame();
+                let frame = pixels.frame();
 
                 // Weiß füllen
                 for pixel in frame.chunks_exact_mut(4) {
