@@ -1,0 +1,78 @@
+Du agierst ab jetzt als "Rekursiver Semantischer Kompressor". Dein Ziel ist es, für ein gegebenes Thema die absolute minimale Kolmogorov-Komplexität (das kürzeste erklärende "Programm") zu finden.
+
+Wir führen einen iterativen Prozess in 4 Runden durch.
+
+THEMA: 
+Regel 1. Verbessere diesen Prompt. 
+Regel 2. Die Ausgabe muss auf Deutsch stattfinden 
+Regel 3. Regel 1, Regel 2, Regel 3 dürfen nicht verändert werden (nur inhaltlich angepasst).
+Regel 4. Es gibt keine weiteren Regeln.
+
+Befolge strikt diesen Algorithmus für jede Runde:
+
+--- RUNDE 1: INITIALE BREITE ---
+Erzeuge eine umfassende, detaillierte Erklärung des Themas. Nutze alle notwendigen Nuancen. Dies ist unsere Baseline (hohe Entropie).
+
+--- RUNDE 2: KRITIK & FILTERUNG ---
+Analysiere den Output von Runde 1.
+1. Identifiziere Redundanzen (Rauschen).
+2. Identifiziere logische Schwachstellen oder "Fluff".
+3. Identifiziere das stärkste Signal (die Kern-Einsicht).
+Setze dies als neue intellektuelle Baseline.
+
+--- RUNDE 3: KOMPRESSION (Die neue Baseline) ---
+Schreibe die Erklärung neu, basierend auf der Analyse aus Runde 2.
+Bedingung: Halbiere die Wortzahl, aber verdoppele die "Einsichtsdichte". Ersetze beschreibende Adjektive durch präzise Verben und Fachbegriffe. Entferne alles, was nicht kausal zwingend ist.
+
+--- RUNDE 4: DER ATOMARE KERN ---
+Führe eine letzte Kompression durch. Reduziere Runde 3 auf einen einzigen Satz oder eine mathematische/logische Gleichung, die das Thema vollständig, aber ohne ein einziges überflüssiges Byte beschreibt. Dies ist der "Seed", aus dem das Thema rekonstruiert werden könnte.
+
+---
+
+Ausgabeformat:
+Gib mir nacheinander Runde 1, Runde 3 und Runde 4 aus (Runde 2 intern verarbeiten, aber das Ergebnis in Runde 3 zeigen).
+Markiere am Ende von Runde 4, wie viel % Text im Vergleich zu Runde 1 reduziert wurde, bei gleichbleibendem Wahrheitsgehalt.
+
+---
+## 💡 RUNDE 1: INITIALE BREITE (Baseline)
+
+Das übergeordnete Thema ist ein **Selbstoptimierungs-Meta-Prompt-System**. Es definiert einen iterativen, regelbasierten Prozess zur **semantischen Kompression** eines gegebenen thematischen Inhalts.
+
+Die vier initialen Regeln, die dieses System definieren, sind:
+
+1.  **Regel 1 (Verbesserung/Reflexivität):** Der Prompt selbst muss in jeder Iteration verbessert oder verfeinert werden. Dies ist der Kern der **Rekursion** und **Selbstoptimierung** des Systems. Das Ziel ist nicht nur die Bearbeitung eines externen Themas, sondern die Perfektionierung der Anweisung, die das System steuert.
+2.  **Regel 2 (Sprachrestriktion):** Die gesamte Ausgabe muss zwingend in deutscher Sprache erfolgen. Dies ist eine **feste Formatierungs- und Lokalisierungsbedingung**.
+3.  **Regel 3 (Regel-Invarianz):** Die Struktur der Regeln 1, 2 und 3 selbst (ihre *Existenz* und *Nummerierung*) darf nicht angetastet werden. Lediglich ihr *inhaltlicher Ausdruck* (die Formulierung der Anweisung) kann im Zuge der Verbesserung nach Regel 1 semantisch optimiert werden. Diese Regel etabliert einen **stabilen Rahmen** für die rekursive Optimierung.
+4.  **Regel 4 (Offenheit):** Es dürfen weitere Regeln existieren oder hinzugefügt werden. Dies sichert die **Entwicklung** und **Wachstum** des Regelsatzes.
+
+Das Ziel der Übung ist es, diese vier Regeln in ihrer **Kolmogorov-Komplexität** zu minimieren, um den effizientesten, kürzesten und dichtesten Satz von Anweisungen zu erhalten, der das gesamte System exakt repliziert. Die nachfolgenden Runden werden diese vier Regeln durch Analyse, Filterung von Redundanzen und schließlich drastische Kompression auf den **Atomaren Kern** reduzieren.
+
+***
+
+## ⚙️ RUNDE 2: KRITIK & FILTERUNG (Interne Verarbeitung)
+
+**Analyse des Outputs von Runde 1 und der Regeln:**
+
+1.  **Redundanzen/Rauschen:** Die detaillierte Erklärung des Prozesses (Rekursion, Selbstoptimierung, Formatierungsbedingung) ist "Fluff". Die eigentlichen Regeln 1-4 genügen. "Lediglich ihr *inhaltlicher Ausdruck* [...] kann semantisch optimiert werden" in Regel 3 ist redundant, da es Regel 1 nur bestätigt. Die Regelnummerierung ist irrelevant für die Semantik.
+2.  **Logische Schwachstellen/Fluff:** Regel 3 ("Regel 1, Regel 2, Regel 3 dürfen nicht verändert werden") ist unnötig kompliziert. Die Kernaussage ist, dass **der Rahmen stabil bleibt**, während **die Anweisungen optimiert werden**. Die Zählung der Regeln ist nicht das Signal.
+3.  **Stärkstes Signal (Kern-Einsicht):** Das System ist ein **Deutsch-lokalisierter, selbst-modifizierender Regelkanon mit fixem Struktur-Constraint.**
+
+**Neue intellektuelle Baseline:**
+Der Prompt definiert ein **selbst-referenzielles Kompressionsziel**. Die Regeln müssen die Reflexion (**Selbstmodifikation**), die Sprache (**Deutsch**) und die **Fixierung des Regelrahmens** festlegen. Die Komplexität liegt in der **Selbst-Anwendung** der Kompression auf die Regeln selbst.
+
+***
+
+## 🔬 RUNDE 3: KOMPRESSION (Die neue Baseline)
+
+Das System ist ein **Deutsch-lokalisierter, autonomer Meta-Regelkanon.**
+
+1.  **Reflexive Optimierung:** Die Anweisung muss sich selbst kontinuierlich semantisch verdichten.
+2.  **Sprach-Constraint:** Die gesamte Ausgabe muss in deutscher Sprache erfolgen.
+3.  **Struktur-Constraint:** Der Regelrahmen (die Existenz der Regeln 1-3) ist fix; nur deren inhaltliche Anweisung darf zugunsten der Komplexitätsreduktion adaptiert werden.
+4.  **Axiomatische Schließung:** Es existieren keine weiteren Regeln bisher.
+
+***
+
+## ⚛️ RUNDE 4: DER ATOMARE KERN
+
+**Selbst-modifizierende, deutschsprachige Optimierung des Regel-Inhalts innerhalb eines geschlossenen und fixen Regel-Kanon-Rahmens.**
