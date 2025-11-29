@@ -1,0 +1,76 @@
+---
+
+## **REKURSIVER SEMANTISCHER KOMPRESSOR**
+
+*(Abstraktion + Konkretisierung als ein rekursives, 3-stufiges System)*
+
+---
+
+## **META-TEMPLATE V3 (ABSTRAKTE STRUKTUR)**
+
+**META-EINGANG:**
+Struktur des optimierten 3-Runden-Kompressionsprozesses:
+
+1. **Abstrakt-Kausale Extraktion & Filterung**
+2. **Kompressions-Fusion**
+3. **Atomarer Kern / Minimaler Seed**
+
+Dieses Meta-Template beschreibt die optimierte Logik des gesamten Verfahrens.
+
+---
+
+## **INSTANZIERTES TEMPLATE V3**
+
+**THEMA:**
+[ HIER IHR NEUES THEMA EINSETZEN ]
+
+Du führst **beide Inputs gleichzeitig aus**:
+
+1. das konkrete Thema
+2. das Meta-Template (als strukturelle Blaupause)
+
+Wir arbeiten in **3 Runden**, wobei das Meta-Template automatisch mitverarbeitet wird.
+
+---
+
+### **RUNDE 1 — ABSTRAKT-KAUSALE EXTRAKTION & FILTERUNG**
+
+*(Fusion aus V1-R1/R2, optimiert für Abstraktion)*
+
+Verarbeite das Thema (T) und das Meta-Template. Führe eine **interne Abstraktionsschleife** durch, um die **generalisierte Meta-Ebene** $T_{Meta}$ zu erreichen, bevor die Destillation erfolgt.
+
+1.  **Extrahiere und filtriere** die minimalen kausalen und funktionalen Abhängigkeiten des Themas und der Meta-Struktur **direkt** aus dem Input.
+2.  **Validiere** die extrahierte kausale Form durch einen **generalisierenden Abstraktionsschritt** $T \to T_{Meta}$, um sicherzustellen, dass keine spezifischen Metaphern oder Beispiele die Universalität des Kerns beeinträchtigen.
+3.  Forme die abstrakte Kernrepräsentation.
+
+---
+
+### **RUNDE 2 — KOMPRESSIONS-FUSION**
+
+*(Entspricht V1-R3, angepasst an 3 Schritte)*
+
+Erstelle eine neue Erklärung basierend auf dem Output aus Runde 1, die:
+
+* thematische und meta-template-bedingte Elemente **fusioniert**.
+* die **Einsichtsdichte verdoppelt** und nur präzise, generalisierte, kausale Strukturen verwendet.
+* die Erklärung des Themas mit dem **V3-Ziel** (minimaler rekonstruktiver Code C) verschmilzt.
+* die Wortzahl auf ca. 35 % (±10 %) der ursprünglichen V1-Wortzahl (der *potenziellen* R1-Expansion) reduziert.
+
+Dies ist die **komprimierte instanzierte Version des Meta-Templates angewendet auf das Thema**.
+
+---
+
+### **RUNDE 3 — ATOMARER KERN**
+
+*(Entspricht V1-R4)*
+
+Komprimiere Runde 2 zu **einem einzigen Ausdruck**, der gleichzeitig:
+
+* das Thema
+* die Meta-Struktur
+* den Transformationsprozess selbst
+
+in einem minimalen rekonstruktiven Seed kodiert.
+
+**ZIELFORMEL DES KERNS:**
+$$K_{B} = C_{min}(C \leftrightarrow T)$$.
