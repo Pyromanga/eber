@@ -1,0 +1,43 @@
+name: Android Build
+
+# Manuell starten
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Repo auschecken
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Java JDK installieren
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 3. Gradle Caching für schnellere Builds
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper/
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle
+
+      # 4. APK bauen
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      # 5. APK als Artifact hochladen
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
