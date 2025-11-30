@@ -14,6 +14,11 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.showDotButton)
         val button2 = findViewById<Button>(R.id.showLineButton)
         val container = findViewById<FrameLayout>(R.id.viewContainer)
+val modeButton = findViewById<Button>(R.id.modeButton)
+modeButton.setOnClickListener {
+    drawingView.currentMode = if (drawingView.currentMode == Mode.DRAW) Mode.TRANSFORM else Mode.DRAW
+    modeButton.text = if (drawingView.currentMode == Mode.DRAW) "Zeichnen" else "Verschieben/Zoom"
+}
 
 
         val myView = MyView(this)
