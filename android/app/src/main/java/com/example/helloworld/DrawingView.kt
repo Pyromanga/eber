@@ -13,13 +13,12 @@ import kotlin.math.atan2
 
 class DrawingView(context: Context) : View(context) {
 
+    enum class Mode {
+        DRAW,
+        TRANSFORM
+    }
 
-enum class Mode {
-    DRAW,
-    TRANSFORM
-}
-
-var currentMode = Mode.DRAW
+    var currentMode = Mode.DRAW
 
     private val paint = Paint().apply {
         color = Color.BLUE
@@ -78,69 +77,68 @@ var currentMode = Mode.DRAW
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-    // Zoom / Rotation nur im Transform-Modus
-    if (currentMode == Mode.TRANSFORM) {
-        scaleDetector.onTouchEvent(event)
+        // Zoom / Rotation nur im Transform-Modus
+        if (currentMode == Mode.TRANSFORM) {
+            scaleDetector.onTouchEvent(event)
 
-        if (event.pointerCount == 2) {
-            // Rotation
-            val dx = event.getX(1) - event.getX(0)
-            val dy = event.getY(1) - event.getY(0)
-            val angle = Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())).toFloat()
-            if (!isRotating) {
-                prevAngle = angle
-                isRotating = true
+            if (event.pointerCount == 2) {
+                // Rotation
+                val dx = event.getX(1) - event.getX(0)
+                val dy = event.getY(1) - event.getY(0)
+                val angle = Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())).toFloat()
+                if (!isRotating) {
+                    prevAngle = angle
+                    isRotating = true
+                } else {
+                    val delta = angle - prevAngle
+                    rotationDegrees += delta
+                    prevAngle = angle
+                }
+                invalidate()
+                return true
             } else {
-                val delta = angle - prevAngle
-                rotationDegrees += delta
-                prevAngle = angle
+                isRotating = false
             }
-            invalidate()
-            return true
-        } else {
-            isRotating = false
+
+            // Panning (ein Finger)
+            if (event.pointerCount == 1) {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        lastTouchX = event.x
+                        lastTouchY = event.y
+                        isPanning = true
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        if (!isPanning) return true
+                        val dx = event.x - lastTouchX
+                        val dy = event.y - lastTouchY
+                        offsetX += dx
+                        offsetY += dy
+                        lastTouchX = event.x
+                        lastTouchY = event.y
+                        invalidate()
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        isPanning = false
+                    }
+                }
+            }
         }
 
-        // Panning (ein Finger)
-        if (event.pointerCount == 1) {
+        // Zeichnen nur im Draw-Modus
+        if (currentMode == Mode.DRAW && event.pointerCount == 1) {
+            val (x, y) = toCanvasCoordinates(event.x, event.y)
             when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    lastTouchX = event.x
-                    lastTouchY = event.y
-                    isPanning = true
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    if (!isPanning) return true
-                    val dx = event.x - lastTouchX
-                    val dy = event.y - lastTouchY
-                    offsetX += dx
-                    offsetY += dy
-                    lastTouchX = event.x
-                    lastTouchY = event.y
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                    pathPoints.add(x to y)
+                    db.pointDao().insert(Point(x = x, y = y))
                     invalidate()
                 }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    isPanning = false
-                }
             }
         }
+
+        return true
     }
-
-    // Zeichnen nur im Draw-Modus
-    if (currentMode == Mode.DRAW && event.pointerCount == 1) {
-        val (x, y) = toCanvasCoordinates(event.x, event.y)
-        when (event.action) {
-            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                pathPoints.add(x to y)
-                db.pointDao().insert(Point(x = x, y = y))
-                invalidate()
-            }
-        }
-    }
-
-    return true
-}
-
 
     fun clear() {
         pathPoints.clear()
@@ -151,27 +149,27 @@ var currentMode = Mode.DRAW
         rotationDegrees = 0f
         invalidate()
     }
+
     private fun toCanvasCoordinates(x: Float, y: Float): Pair<Float, Float> {
-    // Schritt 1: Verschiebung (Pan) abziehen
-    var px = x - offsetX
-    var py = y - offsetY
+        // Schritt 1: Verschiebung (Pan) abziehen
+        var px = x - offsetX
+        var py = y - offsetY
 
-    // Schritt 2: Rotation um die Mitte zurückdrehen
-    val cx = width / 2f
-    val cy = height / 2f
-    val rad = Math.toRadians(-rotationDegrees.toDouble()) // invers rotieren
-    val cos = kotlin.math.cos(rad)
-    val sin = kotlin.math.sin(rad)
-    val nx = cos*(px - cx) - sin*(py - cy) + cx
-    val ny = sin*(px - cx) + cos*(py - cy) + cy
-    px = nx.toFloat()
-    py = ny.toFloat()
+        // Schritt 2: Rotation um die Mitte zurückdrehen
+        val cx = width / 2f
+        val cy = height / 2f
+        val rad = Math.toRadians(-rotationDegrees.toDouble()) // invers rotieren
+        val cos = kotlin.math.cos(rad)
+        val sin = kotlin.math.sin(rad)
+        val nx = cos * (px - cx) - sin * (py - cy) + cx
+        val ny = sin * (px - cx) + cos * (py - cy) + cy
+        px = nx.toFloat() // Fixed Typo Here
+        py = ny.toFloat()
 
-    // Schritt 3: Zoom abziehen
-    px = (px - cx) / scaleFactor + cx
-    py = (py - cy) / scaleFactor + cy
+        // Schritt 3: Zoom abziehen
+        px = (px - cx) / scaleFactor + cx
+        py = (py - cy) / scaleFactor + cy
 
-    return px to py
-  }
-
+        return px to py
+    }
 }
