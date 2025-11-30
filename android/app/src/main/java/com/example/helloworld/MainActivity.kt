@@ -19,6 +19,9 @@ class MainActivity : AppCompatActivity() {
         val myView = MyView(this)
         container.addView(myView)
         
+        val drawingView = DrawingView(this)
+        container.addView(drawingView)
+        
         button.setOnClickListener {
           myView.mode = "dot"
           myView.invalidate()
