@@ -2,6 +2,8 @@ package com.example.helloworld
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -10,20 +12,41 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         try {
-            setContentView(R.layout.activity_main) // oder MyView(this)
+            // Standard Layout laden
+            setContentView(R.layout.activity_main)
 
-            // Beispiel: Zugriff auf TextView
             val textView: TextView = findViewById(R.id.textView)
-            textView.text = "App läuft!"
+            val btnCustomView: Button = findViewById(R.id.btnCustomView)
+
+            // Button klickbar machen
+            btnCustomView.setOnClickListener {
+                try {
+                    // Dein Custom View laden
+                    val customView = MyView(this)
+                    setContentView(customView)
+                } catch (e: Exception) {
+                    // Fehler abfangen
+                    Log.e("CrashLogger", "Fehler beim Laden von MyView: ${e.message}", e)
+
+                    val errorText = TextView(this)
+                    errorText.text = "Fehler: ${e.message}"
+                    errorText.textSize = 18f
+                    setContentView(errorText)
+                }
+            }
 
         } catch (e: Exception) {
-            // Fehler in Logcat sichtbar
-            Log.e("CrashLogger", "Fehler beim Start: ${e.message}", e)
+            // Fehler beim Initialisieren des Main Layout
+            Log.e("CrashLogger", "Fehler in MainActivity: ${e.message}", e)
 
-            // Optional: Fehler auf dem Bildschirm anzeigen
-            val tv = TextView(this)
-            tv.text = "Fehler: ${e.message}"
-            setContentView(tv)
+            val errorText = TextView(this)
+            errorText.text = "Fehler beim Start: ${e.message}"
+            errorText.textSize = 18f
+            val layout = LinearLayout(this)
+            layout.orientation = LinearLayout.VERTICAL
+            layout.gravity = android.view.Gravity.CENTER
+            layout.addView(errorText)
+            setContentView(layout)
         }
     }
 }
