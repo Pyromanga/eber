@@ -270,4 +270,8 @@ class DrawingView(context: Context) : View(context) {
         }
         invalidate()
     }
+    // In DrawingView.kt
+fun setStrokeWidth(width: Float) {
+    paint.strokeWidth = width.coerceIn(5f, 50f) // Sicherstellen, dass die Breite Sinn macht
+}
 }
