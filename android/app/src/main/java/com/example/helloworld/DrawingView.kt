@@ -117,8 +117,8 @@ class DrawingView(context: Context) : View(context) {
             }
 
             // Zeichnen (optional: gleichzeitig)
-            val x = event.x - offsetX
-            val y = event.y - offsetY
+            val (x, y) = toCanvasCoordinates(event.x, event.y)
+
             when (event.action) {
                 MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
                     pathPoints.add(x to y)
@@ -139,4 +139,27 @@ class DrawingView(context: Context) : View(context) {
         rotationDegrees = 0f
         invalidate()
     }
+    private fun toCanvasCoordinates(x: Float, y: Float): Pair<Float, Float> {
+    // Schritt 1: Verschiebung (Pan) abziehen
+    var px = x - offsetX
+    var py = y - offsetY
+
+    // Schritt 2: Rotation um die Mitte zurückdrehen
+    val cx = width / 2f
+    val cy = height / 2f
+    val rad = Math.toRadians(-rotationDegrees.toDouble()) // invers rotieren
+    val cos = kotlin.math.cos(rad)
+    val sin = kotlin.math.sin(rad)
+    val nx = cos*(px - cx) - sin*(py - cy) + cx
+    val ny = sin*(px - cx) + cos*(py - cy) + cy
+    px = nx.toFloat()
+    py = ny.toFloat()
+
+    // Schritt 3: Zoom abziehen
+    px = (px - cx) / scaleFactor + cx
+    py = (py - cy) / scaleFactor + cy
+
+    return px to py
+}
+
 }
