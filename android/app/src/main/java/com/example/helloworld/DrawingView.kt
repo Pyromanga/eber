@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.view.MotionEvent
 import android.view.View
+import com.example.helloworld.db.AppDatabase
+import com.example.helloworld.db.Point
 
 class DrawingView(context: Context) : View(context) {
 
@@ -15,11 +17,20 @@ class DrawingView(context: Context) : View(context) {
         style = Paint.Style.STROKE
     }
 
-    private val path = android.graphics.Path()
+    private val pathPoints = mutableListOf<Pair<Float, Float>>()
+    private val db = AppDatabase.getInstance(context)
+
+    init {
+        // beim Start alle gespeicherten Punkte laden
+        val savedPoints = db.pointDao().getAll()
+        pathPoints.addAll(savedPoints.map { it.x to it.y })
+    }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawPath(path, paint)
+        for ((x, y) in pathPoints) {
+            canvas.drawCircle(x, y, 10f, paint)
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -27,12 +38,19 @@ class DrawingView(context: Context) : View(context) {
         val y = event.y
 
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> path.moveTo(x, y)
-            MotionEvent.ACTION_MOVE -> path.lineTo(x, y)
-            MotionEvent.ACTION_UP -> {} // optional: Aktionen beim Loslassen
+            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                pathPoints.add(x to y)
+                db.pointDao().insert(Point(x = x, y = y))
+            }
         }
 
-        invalidate() // zwingt redraw
+        invalidate()
         return true
+    }
+
+    fun clear() {
+        pathPoints.clear()
+        db.pointDao().clear()
+        invalidate()
     }
 }
