@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val button = findViewById<Button>(R.id.showDotButton)
+        val button2 = findViewById<Button>(R.id.showLineButton)
         val container = findViewById<FrameLayout>(R.id.viewContainer)
 
         button.setOnClickListener {
@@ -19,6 +20,12 @@ class MainActivity : AppCompatActivity() {
             val dotView = DotView(this)
             container.removeAllViews()  // optional — wenn du vorherigen Punkt entfernen willst
             container.addView(dotView)
+        }
+        button2.setOnClickListener {
+            // Punkt-View einfügen, aber TextView bleibt stehen
+            val lineView = LineView(this)
+            container.removeAllViews()  // optional — wenn du vorherigen Punkt entfernen willst
+            container.addView(lineView)
         }
     }
 }
