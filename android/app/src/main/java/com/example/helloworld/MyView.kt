@@ -1,4 +1,3 @@
-// MyView.kt
 package com.example.helloworld
 
 import android.content.Context
@@ -15,7 +14,6 @@ class MyView(context: Context) : View(context) {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        // Zeichne einen Strich von (50,50) nach (300,300)
         canvas.drawLine(50f, 50f, 300f, 300f, paint)
     }
 }
