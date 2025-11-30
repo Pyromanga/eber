@@ -13,6 +13,14 @@ import kotlin.math.atan2
 
 class DrawingView(context: Context) : View(context) {
 
+
+enum class Mode {
+    DRAW,
+    TRANSFORM
+}
+
+var currentMode = Mode.DRAW
+
     private val paint = Paint().apply {
         color = Color.BLUE
         strokeWidth = 8f
@@ -70,15 +78,15 @@ class DrawingView(context: Context) : View(context) {
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        // Zoom
+    // Zoom / Rotation nur im Transform-Modus
+    if (currentMode == Mode.TRANSFORM) {
         scaleDetector.onTouchEvent(event)
 
-        // Rotation (zwei Finger)
         if (event.pointerCount == 2) {
+            // Rotation
             val dx = event.getX(1) - event.getX(0)
             val dy = event.getY(1) - event.getY(0)
             val angle = Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())).toFloat()
-
             if (!isRotating) {
                 prevAngle = angle
                 isRotating = true
@@ -93,7 +101,7 @@ class DrawingView(context: Context) : View(context) {
             isRotating = false
         }
 
-        // Panning (ein Finger ohne Zeichnen)
+        // Panning (ein Finger)
         if (event.pointerCount == 1) {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -115,20 +123,24 @@ class DrawingView(context: Context) : View(context) {
                     isPanning = false
                 }
             }
+        }
+    }
 
-            // Zeichnen (optional: gleichzeitig)
-            val (x, y) = toCanvasCoordinates(event.x, event.y)
-
-            when (event.action) {
-                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                    pathPoints.add(x to y)
-                    db.pointDao().insert(Point(x = x, y = y))
-                }
+    // Zeichnen nur im Draw-Modus
+    if (currentMode == Mode.DRAW && event.pointerCount == 1) {
+        val (x, y) = toCanvasCoordinates(event.x, event.y)
+        when (event.action) {
+            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                pathPoints.add(x to y)
+                db.pointDao().insert(Point(x = x, y = y))
+                invalidate()
             }
         }
-
-        return true
     }
+
+    return true
+}
+
 
     fun clear() {
         pathPoints.clear()
@@ -160,6 +172,6 @@ class DrawingView(context: Context) : View(context) {
     py = (py - cy) / scaleFactor + cy
 
     return px to py
-}
+  }
 
 }
