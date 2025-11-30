@@ -56,17 +56,41 @@ class DrawingView(context: Context) : View(context) {
     private var lastAngle = 0f
     
     // Scale Detector
-    private val scaleDetector = ScaleGestureDetector(context, object :
-        ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        override fun onScale(detector: ScaleGestureDetector): Boolean {
-            val oldScale = scaleFactor
-            scaleFactor *= detector.scaleFactor
-            scaleFactor = scaleFactor.coerceIn(0.1f, 10f) // Limits setzen
-            
-            // Optional: Zoom zum Fokuspunkt (komplexer, hier vereinfacht global)
-            return true
-        }
-    })
+    // In DrawingView.kt
+// ...
+// Scale Detector
+private val scaleDetector = ScaleGestureDetector(context, object :
+    ScaleGestureDetector.SimpleOnScaleGestureListener() {
+    override fun onScale(detector: ScaleGestureDetector): Boolean {
+        
+        // 1. Speichere den alten Zustand (jetzt wieder benötigt!)
+        val oldScale = scaleFactor
+        
+        // 2. Skaliere den Faktor
+        scaleFactor *= detector.scaleFactor
+        scaleFactor = scaleFactor.coerceIn(0.1f, 10f) // Limits setzen
+
+        // 3. Focal Point Zoom Logik (Kompensation)
+        
+        // Der Fokuspunkt der Gestik relativ zum Bildschirm
+        val focusX = detector.focusX
+        val focusY = detector.focusY
+        
+        // Berechnung der Skalierungsänderung: (neuer Scale / alter Scale)
+        val scaleChange = scaleFactor / oldScale 
+        
+        // Anpassung des Offsets (Panning), um den Punkt unter den Fingern zu fixieren.
+        // Der Offset muss um die Differenz verschoben werden, die durch die Skalierung entsteht.
+        
+        // Die Differenz: Fokuspunkt minus aktueller Offset * (Skalierungsänderung - 1)
+        offsetX -= (focusX - offsetX) * (scaleChange - 1f)
+        offsetY -= (focusY - offsetY) * (scaleChange - 1f)
+        
+        invalidate()
+        return true
+    }
+})
+// ...
 
     init {
         // Beim Start Punkte laden und Path rekonstruieren
