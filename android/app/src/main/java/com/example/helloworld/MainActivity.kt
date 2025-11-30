@@ -11,17 +11,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         try {
-            // Minimal Layout laden
+            // Standard-Layout laden
             setContentView(R.layout.activity_main)
 
             val textView: TextView = findViewById(R.id.textView)
             textView.text = "App läuft!"
 
         } catch (e: Exception) {
-            // Fehler abfangen
             Log.e("CrashLogger", "Fehler in MainActivity: ${e.message}", e)
 
-            // Fehler auf Bildschirm anzeigen
             val errorText = TextView(this)
             errorText.text = "Fehler beim Start: ${e.message}"
             errorText.textSize = 18f
@@ -30,7 +28,6 @@ class MainActivity : AppCompatActivity() {
             layout.orientation = LinearLayout.VERTICAL
             layout.gravity = android.view.Gravity.CENTER
             layout.addView(errorText)
-
             setContentView(layout)
         }
     }
