@@ -15,17 +15,17 @@ class MainActivity : AppCompatActivity() {
         val button2 = findViewById<Button>(R.id.showLineButton)
         val container = findViewById<FrameLayout>(R.id.viewContainer)
 
+
+        val myView = MyView(this)
+        container.addView(myView)
+        
         button.setOnClickListener {
-            // Punkt-View einfügen, aber TextView bleibt stehen
-            val dotView = DotView(this)
-            container.removeAllViews()  // optional — wenn du vorherigen Punkt entfernen willst
-            container.addView(dotView)
+          myView.mode = "dot"
+          myView.invalidate()
         }
         button2.setOnClickListener {
-            // Punkt-View einfügen, aber TextView bleibt stehen
-            val lineView = LineView(this)
-            container.removeAllViews()  // optional — wenn du vorherigen Punkt entfernen willst
-            container.addView(lineView)
+          myView.mode = "line"
+          myView.invalidate()
         }
     }
 }
