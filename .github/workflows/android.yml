@@ -10,7 +10,7 @@ jobs:
     steps:
       # 1. Repo auschecken
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # 2. Java JDK installieren
       - name: Set up JDK
