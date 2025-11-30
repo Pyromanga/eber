@@ -21,7 +21,7 @@ jobs:
 
       # 3. Gradle installieren
       - name: Install Gradle
-        uses: gradle/gradle-build-action@v4
+        uses: gradle/gradle-build-action@v3
         with:
           gradle-version: 8.3
 
