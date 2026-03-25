@@ -1,0 +1,77 @@
+name: Android Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Repo auschecken
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Java JDK installieren
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 3. Gradle einrichten (Wrapper wird bereitgestellt)
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          gradle-version: 8.4
+
+      # 4. Projektstruktur anzeigen (hilft bei der Fehlersuche)
+      - name: List project structure
+        run: |
+          echo "=== Gradle files ==="
+          find . -type f -name "*.gradle" -o -name "settings.gradle*" -o -name "gradlew" | head -20
+          echo "=== Directory tree (first 2 levels) ==="
+          ls -la
+          ls -la */ 2>/dev/null || true
+
+      # 5. Gradle Wrapper ausführbar machen (falls vorhanden)
+      - name: Make gradlew executable
+        run: find . -name "gradlew" -exec chmod +x {} \;
+
+      # 6. Projekte auflisten (um Modulnamen zu erkennen)
+      - name: List Gradle projects
+        run: |
+          if [ -f "villagecraft/gradlew" ]; then
+            cd villagecraft && ./gradlew projects
+          elif [ -f "android/gradlew" ]; then
+            cd android && ./gradlew projects
+          elif [ -f "gradlew" ]; then
+            ./gradlew projects
+          else
+            echo "❌ Gradle wrapper not found in any expected location"
+            exit 1
+          fi
+
+      # 7. Debug APK bauen
+      - name: Build Debug APK
+        run: |
+          # Hier musst du den tatsächlichen Pfad und Modulnamen anpassen
+          if [ -f "villagecraft/gradlew" ]; then
+            cd villagecraft && ./gradlew :app:assembleDebug
+          elif [ -f "android/gradlew" ]; then
+            cd android && ./gradlew :app:assembleDebug
+          elif [ -f "gradlew" ]; then
+            ./gradlew :app:assembleDebug
+          else
+            echo "❌ Cannot locate Gradle wrapper"
+            exit 1
+          fi
+        env:
+          JAVA_HOME: ${{ steps.setup-java.outputs.java-home }}
+
+      # 8. APK als Artifact hochladen
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug.apk
+          path: villagecraft/app/build/outputs/apk/debug/*.apk   # Pfad ggf. anpassen
