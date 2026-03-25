@@ -27,7 +27,7 @@ jobs:
 
       # 4. Build Debug APK (im Unterordner android/)
       - name: Build Debug APK
-        working-directory: android
+        working-directory: villagecraft
         run: gradle assembleDebug
         env:
           JAVA_HOME: ${{ steps.setup-java.outputs.java-home }}
