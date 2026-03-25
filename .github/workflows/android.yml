@@ -25,6 +25,16 @@ jobs:
         with:
           gradle-version: 8.4
 
+
+      - name: List Gradle projects
+        run: ./gradlew projects
+
+      - name: List all tasks (optional)
+        run: ./gradlew tasks --all
+
+      - name: Build debug APK
+        run: ./gradlew :app:assembleDebug   
+      # oder :<modulname>:assembleDebug
       # 4. Build Debug APK (im Unterordner android/)
       - name: Build Debug APK
         working-directory: villagecraft
