@@ -1,77 +1,49 @@
-name: Android Build
+# .github/workflows/build.yml
+name: Build Android APK
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
-      # 1. Repo auschecken
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # 2. Java JDK installieren
-      - name: Set up JDK
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: temurin
+          java-version: 17
 
-      # 3. Gradle einrichten (Wrapper wird bereitgestellt)
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v5
+      # Android SDK ist auf ubuntu-24.04 bereits vorinstalliert
+      # Aber local.properties muss explizit gesetzt werden
+      - name: Create local.properties
+        working-directory: android
+        run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+
+      # gradlew generieren falls nicht im Repo
+      - name: Setup Gradle Wrapper
+        working-directory: android
+        run: |
+          gradle wrapper --gradle-version 8.4
+          chmod +x gradlew
+
+      - name: Setup Gradle
+        uses: gradle/actions@v5
         with:
-          gradle-version: 8.4
+          gradle-version: wrapper   # ← wrapper statt 8.4 !
 
-      # 4. Projektstruktur anzeigen (hilft bei der Fehlersuche)
-      - name: List project structure
-        run: |
-          echo "=== Gradle files ==="
-          find . -type f -name "*.gradle" -o -name "settings.gradle*" -o -name "gradlew" | head -20
-          echo "=== Directory tree (first 2 levels) ==="
-          ls -la
-          ls -la */ 2>/dev/null || true
-
-      # 5. Gradle Wrapper ausführbar machen (falls vorhanden)
-      - name: Make gradlew executable
-        run: find . -name "gradlew" -exec chmod +x {} \;
-
-      # 6. Projekte auflisten (um Modulnamen zu erkennen)
-      - name: List Gradle projects
-        run: |
-          if [ -f "villagecraft/gradlew" ]; then
-            cd villagecraft && ./gradlew projects
-          elif [ -f "android/gradlew" ]; then
-            cd android && ./gradlew projects
-          elif [ -f "gradlew" ]; then
-            ./gradlew projects
-          else
-            echo "❌ Gradle wrapper not found in any expected location"
-            exit 1
-          fi
-
-      # 7. Debug APK bauen
       - name: Build Debug APK
-        run: |
-          # Hier musst du den tatsächlichen Pfad und Modulnamen anpassen
-          if [ -f "villagecraft/gradlew" ]; then
-            cd villagecraft && ./gradlew :app:assembleDebug
-          elif [ -f "android/gradlew" ]; then
-            cd android && ./gradlew :app:assembleDebug
-          elif [ -f "gradlew" ]; then
-            ./gradlew :app:assembleDebug
-          else
-            echo "❌ Cannot locate Gradle wrapper"
-            exit 1
-          fi
-        env:
-          JAVA_HOME: ${{ steps.setup-java.outputs.java-home }}
+        working-directory: android  # ← das war wahrscheinlich das Kernproblem
+        run: ./gradlew assembleDebug --stacktrace
 
-      # 8. APK als Artifact hochladen
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug.apk
-          path: villagecraft/app/build/outputs/apk/debug/*.apk   # Pfad ggf. anpassen
+          name: app-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
